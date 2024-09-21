@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -20,5 +21,10 @@ public class ControllerAdvice {
             map.put(fieldError.getField(), fieldError.getDefaultMessage());
         });
         return new DataError<>(map,400);
+    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public DataError<String> handleErrorNotFoundElement(Exception exception){
+        return new DataError<>(exception.getMessage(),404);
     }
 }
